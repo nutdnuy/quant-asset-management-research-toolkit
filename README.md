@@ -72,3 +72,16 @@ component_risk = risk_contributions(estimate, inverse_volatility)
 Allocators accept an optional `PortfolioConstraints` contract. Invalid,
 infeasible, singular, or numerically unrepresentable inputs fail explicitly
 instead of being silently repaired.
+
+## Codex Skills
+
+The repository includes standalone Skills. They are source packages and are
+not installed globally:
+
+- [`qamr-data-boundary`](skills/qamr-data-boundary/SKILL.md): validate and adapt
+  user-provided tabular returns into labelled qamr contracts.
+- [`qamr-covariance-risk`](skills/qamr-covariance-risk/SKILL.md): select and
+  explain covariance estimators, PSD policies, and numerical diagnostics.
+- [`qamr-portfolio-construction`](skills/qamr-portfolio-construction/SKILL.md):
+  construct and compare equal-weight, inverse-volatility, HRP, and HERC
+  portfolios with risk contributions.
