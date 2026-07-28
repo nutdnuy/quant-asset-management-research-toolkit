@@ -262,6 +262,18 @@ The workbook uses synthetic returns to illustrate the calculations in Python.
 This guide explains how to give an AI assistant the correct guardrails while it
 uses the repository Skills.
 
+### Advanced external reading: tail-sensitive risk
+
+QAMR v1 is deliberately covariance-centred and does **not** implement
+Riskfolio-Lib's `RiskFunctions.Kurtosis`. If you want to learn about a
+fourth-moment-derived measure that is more sensitive to unusually large return
+observations, read the official
+[Riskfolio-Lib `Kurtosis` reference](https://riskfolio-lib.readthedocs.io/en/latest/riskfoliolib/risk.html#RiskFunctions.Kurtosis-returns).
+It accepts a single return series and returns what Riskfolio-Lib calls “Square
+Root Kurtosis”. Treat it as a separate, advanced research topic: do not silently
+substitute it for QAMR volatility or covariance, and do not interpret it as a
+forecast or investment recommendation.
+
 ## Content note
 
 Gemini 3.5 Flash assisted with brainstorming the beginner-learning outline.
