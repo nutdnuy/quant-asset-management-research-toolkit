@@ -85,3 +85,10 @@ not installed globally:
 - [`qamr-portfolio-construction`](skills/qamr-portfolio-construction/SKILL.md):
   construct and compare equal-weight, inverse-volatility, HRP, and HERC
   portfolios with risk contributions.
+
+## Tutorial
+
+- [Python Workbook: Quant Portfolio Construction for Complete Beginners](tutorials/quant_portfolio_construction_for_complete_beginners.ipynb)
+  is an English, executable introduction using synthetic data. It covers returns,
+  historical risk, covariance estimation, equal weight, inverse volatility, HRP,
+  HERC, and risk contributions without making investment recommendations.
