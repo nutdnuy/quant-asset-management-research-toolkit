@@ -92,3 +92,7 @@ not installed globally:
   is an English, executable introduction using synthetic data. It covers returns,
   historical risk, covariance estimation, equal weight, inverse volatility, HRP,
   HERC, and risk contributions without making investment recommendations.
+- [Using QAMR Skills: A Complete Beginner's Guide](tutorials/using_qamr_skills_for_complete_beginners.md)
+  is an English, copy-and-paste tutorial for guiding Codex or Claude Code through
+  the data-boundary, covariance-risk, and portfolio-construction Skills. It can
+  be started without data and explains the Skills' limits.
