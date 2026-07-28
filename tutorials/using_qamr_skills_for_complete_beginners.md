@@ -265,14 +265,109 @@ uses the repository Skills.
 ### Advanced external reading: tail-sensitive risk
 
 QAMR v1 is deliberately covariance-centred and does **not** implement
-Riskfolio-Lib's `RiskFunctions.Kurtosis`. If you want to learn about a
-fourth-moment-derived measure that is more sensitive to unusually large return
-observations, read the official
-[Riskfolio-Lib `Kurtosis` reference](https://riskfolio-lib.readthedocs.io/en/latest/riskfoliolib/risk.html#RiskFunctions.Kurtosis-returns).
-It accepts a single return series and returns what Riskfolio-Lib calls “Square
-Root Kurtosis”. Treat it as a separate, advanced research topic: do not silently
-substitute it for QAMR volatility or covariance, and do not interpret it as a
-forecast or investment recommendation.
+Riskfolio-Lib's `RiskFunctions.Kurtosis` or `RiskFunctions.SemiKurtosis`.
+These are optional concepts for studying unusually large return observations.
+They are **not** QAMR APIs, and they should not be silently substituted for
+QAMR volatility or covariance.
+
+The screenshot-style formula is for **SemiKurtosis**, not full Kurtosis. Both
+functions take one return series with shape `T x 1`: `T` observations of one
+asset or one portfolio. The official Riskfolio-Lib documentation calls their
+outputs “Square Root Kurtosis” and “Semi Square Root Kurtosis”.
+
+#### Symbols first
+
+| Symbol | Read it as | Beginner meaning |
+|---|---|---|
+| $X_t$ | “X at time t” | The return at observation $t$, written as a decimal; for example, $-0.02$ means -2%. |
+| $T$ | “number of observations” | How many return observations are in the series. |
+| $\mathbb{E}(X_t)$ | “expected X” | The reference average return in the formula. With a finite historical sample, $\bar X$ (the sample average) is a practical estimate to discuss with your analyst. |
+| $\min(a,0)$ | “the smaller of a and zero” | Keeps a negative value, but replaces zero or a positive value with zero. |
+
+#### Full Square Root Kurtosis
+
+Riskfolio-Lib documents the full version as:
+
+$$
+\operatorname{Kurt}(X) =
+\left[
+\frac{1}{T}\sum_{t=1}^{T}
+\left(X_t - \mathbb{E}(X_t)\right)^4
+\right]^{1/2}.
+$$
+
+For every observation, this formula measures the distance from the reference
+average, raises the distance to the fourth power, averages those values, and
+then takes a square root. The fourth power makes large deviations matter much
+more: a deviation that is twice as large contributes $2^4 = 16$ times as much
+before averaging.
+
+#### Semi Square Root Kurtosis — the formula in the screenshot
+
+Riskfolio-Lib documents the downside-only version as:
+
+$$
+\operatorname{SemiKurt}(X) =
+\left[
+\frac{1}{T}\sum_{t=1}^{T}
+\min\!\left(X_t - \mathbb{E}(X_t), 0\right)^4
+\right]^{1/2}.
+$$
+
+Read it from left to right:
+
+1. Find each return's distance from the reference average.
+2. Keep only negative distances—returns below that reference average. Positive
+   distances become zero because of $\min(\cdot,0)$.
+3. Raise each retained downside distance to the fourth power, so unusually deep
+   negative observations receive extra weight.
+4. Average across all $T$ observations, including the zero contributions.
+5. Take the square root.
+
+This is why SemiKurtosis is a **downside-sensitive** fourth-moment measure: it
+ignores above-reference deviations but magnifies below-reference deviations.
+
+#### Tiny worked example
+
+Suppose three decimal returns are $[-0.02, 0.00, 0.02]$, so the sample average
+is $\bar X = 0$. The only below-average return is $-0.02$.
+
+$$
+\begin{aligned}
+\operatorname{SemiKurt}(X)
+&= \left[
+\frac{(-0.02)^4 + 0^4 + 0^4}{3}
+\right]^{1/2} \\
+&= \left[\frac{0.00000016}{3}\right]^{1/2} \\
+&\approx 0.00023094.
+\end{aligned}
+$$
+
+The $+2\%$ observation is above the average, so SemiKurtosis turns its
+contribution into zero. Full Kurtosis would include both the $-2\%$ and the
+$+2\%$ deviations. The numerical result is a description of this tiny sample,
+not a prediction of future losses.
+
+#### Use it carefully
+
+- This is Riskfolio-Lib's fourth-moment-derived measure, not automatically the
+  same convention as the “excess kurtosis” number reported by another library.
+- Fourth powers make the result especially sensitive to extreme observations
+  and to small samples. Always report the sample window and observation count.
+- Keep the return convention explicit and do not mix prices with returns.
+- Use the official references for the exact external API:
+  [Kurtosis](https://riskfolio-lib.readthedocs.io/en/latest/riskfoliolib/risk.html#RiskFunctions.Kurtosis-returns)
+  and
+  [SemiKurtosis](https://riskfolio-lib.readthedocs.io/en/latest/riskfoliolib/risk.html#RiskFunctions.SemiKurtosis-returns).
+
+If you ask an assistant to explain either measure, keep the request scoped:
+
+```text
+Use the Riskfolio-Lib Kurtosis and SemiKurtosis documentation only as external
+reading. Explain the equation term by term for my provided return series. Do
+not claim that qamr implements these functions, do not fetch data, and do not
+turn the statistic into an investment recommendation or a forecast.
+```
 
 ## Content note
 
