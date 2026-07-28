@@ -289,7 +289,7 @@ outputs “Square Root Kurtosis” and “Semi Square Root Kurtosis”.
 Riskfolio-Lib documents the full version as:
 
 $$
-\operatorname{Kurt}(X) =
+Kurt(X) =
 \left[
 \frac{1}{T}\sum_{t=1}^{T}
 \left(X_t - \mathbb{E}(X_t)\right)^4
@@ -307,7 +307,7 @@ before averaging.
 Riskfolio-Lib documents the downside-only version as:
 
 $$
-\operatorname{SemiKurt}(X) =
+SemiKurt(X) =
 \left[
 \frac{1}{T}\sum_{t=1}^{T}
 \min\!\left(X_t - \mathbb{E}(X_t), 0\right)^4
@@ -333,14 +333,10 @@ Suppose three decimal returns are $[-0.02, 0.00, 0.02]$, so the sample average
 is $\bar X = 0$. The only below-average return is $-0.02$.
 
 $$
-\begin{aligned}
-\operatorname{SemiKurt}(X)
-&= \left[
-\frac{(-0.02)^4 + 0^4 + 0^4}{3}
-\right]^{1/2} \\
-&= \left[\frac{0.00000016}{3}\right]^{1/2} \\
-&\approx 0.00023094.
-\end{aligned}
+SemiKurt(X) =
+\left[\frac{(-0.02)^4 + 0^4 + 0^4}{3}\right]^{1/2}
+= \left[\frac{0.00000016}{3}\right]^{1/2}
+\approx 0.00023094.
 $$
 
 The $+2\%$ observation is above the average, so SemiKurtosis turns its
